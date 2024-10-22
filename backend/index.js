@@ -11,8 +11,8 @@ const client = new Client({
   host: "localhost",
   port: 5432,
   user: "postgres",
-  password: "P0stgres!QL1",
-  database: "eventer",
+  password: "rootuser",
+  database: "FESB_Eventer",
 });
 
 client.connect().then(() => console.log("Connected to database"));

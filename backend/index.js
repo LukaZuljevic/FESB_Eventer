@@ -11,8 +11,8 @@ const client = new Client({
   host: "localhost",
   port: 5432,
   user: "postgres",
-  password: "rootuser",
-  database: "FESB_Eventer",
+  password: "P0stgres!QL1",
+  database: "eventer",
 });
 
 client.connect().then(() => console.log("Connected to database"));
@@ -84,16 +84,21 @@ app.post("/register", (req, res) => {
 
 //Login endpoint, check if user exists and compare passwords
 app.post("/login", (req, res) => {
-  const checkUserQuery = "SELECT * FROM korisnici_role WHERE username = $1";
+  const { input, password } = req.body;
 
+  //checking is email entered or username
+  const isEmail= input.includes('@');
+
+  const checkUserQuery = `SELECT * FROM korisnici_role WHERE ${isEmail ? 'email' : 'username'} = $1`;
+  
   // Check if the user exists in the database
-  client.query(checkUserQuery, [req.body.username], (error, result) => {
+  client.query(checkUserQuery, [input], (error, result) => {
     if (error) {
       return res.json("Error");
     }
 
     if (result.rows.length === 0) {
-      return res.json("Invalid username or password");
+      return res.json("Invalid usernameemail or password");
     }
 
     const user = result.rows[0];
